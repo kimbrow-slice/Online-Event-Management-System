@@ -1,0 +1,37 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Makes images responsive */
+.responsive-image {
+    max-width: 100%;
+    height: auto;
+}
+
+
+
+/* Container to vertically center the CSS image */
+.logo-img-container {
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Optional: center horizontally */
+    height: 100px; /* Set a fixed height for the container; adjust as needed */
+}
+/* Custom size for the CSS design image to match the Bootstrap design image */
+.logo-img {
+    max-width: 100px; /* Adjust this value to match the size of your Bootstrap image */
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
