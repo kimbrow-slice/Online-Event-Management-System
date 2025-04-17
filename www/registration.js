@@ -1,11 +1,18 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', () => {
+  const f = document.getElementById('regForm');
+  const m = document.getElementById('msg');
 
-    const handleSubmit = document.getElementById("submission");
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    m.textContent = '';
 
+    const data = new FormData(f);
+    const res  = await fetch('register.php', { method:'POST', body:data });
 
-handleSubmit.addEventListener("click", function (){
-    if (handleSubmit){
-        
+    if (res.redirected) {        // server sent Location header
+      window.location = res.url;
+    } else {
+      m.textContent = await res.text();
     }
-})
+  });
 });
