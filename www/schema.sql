@@ -1,9 +1,13 @@
+CREATE DATABASE IF NOT EXISTS event_portal
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE event_portal;
+
 CREATE TABLE IF NOT EXISTS users (
-    user_id SERIAL PRIMARY KEY,
-    user_name VARCHAR(255) NOT NULL,
-    user_type VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    currnet_bookings TEXT
+  user_id   INT AUTO_INCREMENT PRIMARY KEY,
+  username  VARCHAR(255) NOT NULL UNIQUE,
+  pass_hash VARCHAR(255) NOT NULL,
+  user_type ENUM('attendee','organizer','admin') DEFAULT 'attendee',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS events (
