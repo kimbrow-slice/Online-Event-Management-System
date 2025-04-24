@@ -1,15 +1,67 @@
 
+<!-- stylesheet.css -->
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
 
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+}
 
+.navbar {
+    background-color: #4e73df !important;
+}
 
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
 
+.nav-link {
+    color: #f8f9fa !important;
+}
 
+.jumbotron {
+    background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+    color: #fff;
+    padding: 3rem 1rem;
+}
 
+.animated-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    animation: fadeInDown 1s ease-in-out;
+}
 
+@keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
 
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
 
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
 
+.footer {
+    background-color: #343a40;
+    color: #adb5bd;
+    padding: 1rem 0;
+    text-align: center;
+}
 
 
 /* Makes images responsive */
