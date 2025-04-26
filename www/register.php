@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'db.php';
+include 'registration.js';
 
 $username = trim($_POST['username'] ?? '');
 $password = $_POST['password'] ?? '';

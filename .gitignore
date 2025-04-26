@@ -1,0 +1,69 @@
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node / npm (if used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer
+www/vendor/
+www/vendor/phpmailer/
+/composer.lock
+composer.phar
+!www/vendor/composer.json
+
+# Environment / secrets
+.env
+.env.*
+
+# PHPStorm & JetBrains
+*.iml
+*.iws
+*.ipr
+*.bak
+*.tmp
+
+# Logs
+*.log
+logs/
+error_log
+
+# Cache / temp
+*.cache
+*.tmp
+*.temp
+.cache/
+.phpunit.result.cache
+
+# Build/output artifacts
+dist/
+build/
+
+# Uploads or local files
+uploads/
+*.zip
+*.tar.gz
+*.rar
+
+# Database backups
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
+# Other
+*.bak
+*.swp
+*.swo
+*.orig
+*.min.js.map

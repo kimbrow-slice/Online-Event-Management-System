@@ -1,24 +1,42 @@
 <?php
 
 require_once 'db.php';
+session_start();
+if (!in_array($_SESSION['user_type'], ['admin', 'organizer'])) {
+  http_response_code(403);
+  exit('Unauthorized');
+}
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+header('Content-Type: text/html; charset=UTF-8');
 
-    $title       = trim($_POST['title'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $event_date  = trim($_POST['event_date'] ?? '');
-    $status      = trim($_POST['status'] ?? 'upcoming');
+$stmt = $pdo->query("
+  SELECT event_id, event_date, event_time, location, description
+  FROM events
+  WHERE status = 'open'
+  ORDER BY event_date, event_time
+");
 
-    // TODO: Add server-side validation (e.g. non-empty title, valid datetime)
+while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $id   = htmlspecialchars($r['event_id'],   ENT_QUOTES);
+    $date = htmlspecialchars($r['event_date'], ENT_QUOTES);
+    $time = htmlspecialchars($r['event_time'], ENT_QUOTES);
+    $loc  = htmlspecialchars($r['location'],   ENT_QUOTES);
+    $desc = htmlspecialchars($r['description'],ENT_QUOTES);
 
-    $stmt = $pdo->prepare("
-        INSERT INTO events (title, description, event_date, status)
-        VALUES (?, ?, ?, ?)
-    ");
-    if ($stmt->execute([$title, $description, $event_date, $status])) {
-        echo "Created event with ID: " . $pdo->lastInsertId();
-    } else {
-        echo "Error: " . implode(', ', $stmt->errorInfo());
-    }
+    echo "
+      <tr>
+        <td>{$date}</td>
+        <td>{$time}</td>
+        <td>{$loc}</td>
+        <td>{$desc}</td>
+        <td>
+          <button
+            class=\"btn btn-primary btn-sm attend-btn\"
+            data-id=\"{$id}\">
+            Attend
+          </button>
+        </td>
+      </tr>
+    ";
 }
 ?>

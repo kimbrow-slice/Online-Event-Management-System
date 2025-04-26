@@ -1,25 +1,25 @@
 <?php
 
-require_once 'db.php'; 
+require_once 'db.php';
 
 $stmt = $pdo->query("
-    SELECT event_id, title, event_date, status
-    FROM events
-    WHERE status IN ('upcoming','open')
-    ORDER BY event_date ASC
+  SELECT event_id, title, event_date, status
+  FROM events
+  ORDER BY event_date
 ");
 
-if ($stmt) {
-    echo "<ul>";
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<li>"
-           . htmlspecialchars($row['title'])
-           . " &mdash; " . htmlspecialchars($row['event_date'])
-           . " [". htmlspecialchars($row['status']) ."]"
-           . "</li>";
-    }
-    echo "</ul>";
-} else {
-    echo "Error fetching events.";
+while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    echo "<tr>
+      <td>" . htmlspecialchars($r['title'])      . "</td>
+      <td>" . htmlspecialchars($r['event_date']) . "</td>
+      <td>" . htmlspecialchars($r['status'])     . "</td>
+      <td>
+        <button class='update-status-btn' 
+                data-id='{$r['event_id']}' 
+                data-status='{$r['status']}'>Change Status</button>
+        <button class='delete-event-btn' 
+                data-id='{$r['event_id']}'>Delete</button>
+      </td>
+    </tr>";
 }
 ?>
