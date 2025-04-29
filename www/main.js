@@ -1,6 +1,35 @@
+let currentUser = { logged_in: false, user_type: 'guest' };
+
+async function loadSession() {
+  try {
+    const res  = await fetch('get_session.php', { credentials: 'include' });
+    const text = await res.text();
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.warn('Invalid JSON from get_session.php:', text);
+      data = { logged_in: false, user_type: 'guest' };
+    }
+
+    currentUser = {
+      logged_in: data.logged_in,
+      user_type: data.user_type || 'guest'
+    };
+  } catch (err) {
+    console.error('loadSession failed entirely:', err);
+    currentUser = { logged_in: false, user_type: 'guest' };
+  }
+}
+
+
+
+
 async function postForm(url, formData) {
   const resp = await fetch(url, {
     method: 'POST',
+    credentials: 'include', 
     body: formData
   });
   const text = await resp.text();
@@ -14,33 +43,184 @@ async function fetchFeedback() {
 }
 
 
+
 // CRUD for Events
 async function fetchEvents() {
-  const resp = await fetch('events_data.php');
+  const userType = currentUser.user_type || 'guest';
+  const url      = userType === 'admin'
+                   ? 'get_all_events.php'
+                   : 'events_data.php';
+
+  // load the rows
+  const resp = await fetch(url, { credentials: 'include' });
   const html = await resp.text();
   document.querySelector('#eventsTable tbody').innerHTML = html;
-  hookEventButtons();
-}
 
-// Button click methods
-function hookEventButtons() {
-  document.querySelectorAll('.update-status-btn').forEach(btn => {
-    btn.onclick = async () => {
-      const id = btn.dataset.id;
-      const status = prompt('New status?', btn.dataset.status);
-      if (!status) return;
-      const fd = new FormData();
-      fd.set('event_id', id);
-      fd.set('status', status);
-      try {
-        await postForm('update_event_status.php', fd);
-        fetchEvents();
-      } catch (e) { alert(e); }
+  // wire up Edit/Delete for admins
+  hookEventButtons();
+
+  // wire up Attend buttons for everyone else
+  document.querySelectorAll('.attend-btn').forEach(btn => {
+    btn.onclick = () => {
+      const row     = btn.closest('tr');
+      const title   = row.querySelector('td:nth-child(4)').textContent;
+      const date    = row.querySelector('td:nth-child(1)').textContent;
+      const eventId = btn.dataset.id;
+
+      document.getElementById('attendEventTitle').textContent       = title;
+      document.getElementById('attendEventDate').textContent        = date;
+      document.getElementById('attendEventId').value                = eventId;
+      document.getElementById('guestName').value                    = '';
+      document.getElementById('guestEmail').value                   = '';
+      document.getElementById('emailConsent').checked               = false;
+      document.getElementById('attendMsg').style.display            = 'none';
+
+      $('#attendModal').modal('show');
     };
   });
+}
+
+// Edit events
+document.querySelectorAll('.edit-event-btn').forEach(btn => {
+  btn.onclick = async () => {
+    const id = btn.dataset.id;
+    try {
+      const resp = await fetch(`get_single_event.php?event_id=${id}`, {
+        credentials: 'include'
+      });
+      if (!resp.ok) throw new Error('Failed to load event.');
+      const event = await resp.json();
+  
+      // populate modal
+      document.getElementById('editEventId').value         = event.event_id;
+      document.getElementById('editEventTitle').value      = event.title;
+      document.getElementById('editEventDate').value       = event.event_date;
+      document.getElementById('editEventTime').value       = event.event_time;
+      document.getElementById('editEventLocation').value   = event.location;
+      document.getElementById('editEventDescription').value= event.description;
+
+  $('#editEventModal').modal('show');
+
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+});  
+
+// Submit Updated Event
+const editEventForm = document.getElementById('editEventForm');
+if (editEventForm) {
+  editEventForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(editEventForm);
+
+    try {
+      await postForm('update_event.php', fd);  // We create this next
+      $('#editEventModal').modal('hide');
+      fetchEvents();
+    } catch (err) {
+      alert(err.message || "Failed to update event.");
+    }
+  };
+}
+
+
+// Fetch all registrations for admin page
+async function fetchRegistrations() {
+  const resp = await fetch('get_registrations.php', {
+    credentials: 'include'
+  });
+  if (!resp.ok) {
+    console.error('Failed to load registrations:', resp.status, await resp.text());
+    return;
+  }
+
+  const data = await resp.json();
+  console.log('Registrations payload:', data);
+
+  const tbody = document.querySelector('#registrationsTable tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  data.forEach(reg => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${reg.registrant_name}</td>
+      <td>${reg.registrant_email}</td>
+      <td>${reg.event_title}</td>
+      <td>${reg.registered_at}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+
+window.addEventListener('DOMContentLoaded', async () => {
+  // load session into currentUser
+  await loadSession();
+  
+  if (
+    currentUser.logged_in &&
+    currentUser.user_type === 'admin' &&
+    !window.location.pathname.endsWith('admin.html')
+  ) {
+    return window.location.href = 'admin.html';
+  }
+  // Bind registrations if on admin.html
+  if (document.getElementById('registrationsTable')) {
+    fetchRegistrations();
+  }
+
+  // After currentUser is set we can load events
+  if (document.getElementById('eventsTable')) {
+    fetchEvents();
+  }
+  // swap nav links
+  if (currentUser.logged_in) {
+    document.getElementById('loginNav').style.display  = 'none';
+    document.getElementById('logoutNav').style.display = 'block';
+  } else {
+    document.getElementById('loginNav').style.display  = 'block';
+    document.getElementById('logoutNav').style.display = 'none';
+  }
+});
+
+
+
+// Button click methods
+async function hookEventButtons() {
+  document.querySelectorAll('.edit-event-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const id = btn.dataset.id;
+      console.log(' Editing event', id);
+
+      // include credentials so SESSIONID is passed through
+      const resp = await fetch(
+        `get_single_event.php?event_id=${id}`,
+        { credentials: 'include' }
+      );
+
+      console.log('status', resp.status);
+      if (!resp.ok) throw new Error('Failed to load event');
+
+      const event = await resp.json();
+      // populate your modal fields...
+      document.getElementById('editEventId').value          = event.event_id;
+      document.getElementById('editEventTitle').value       = event.title;
+      document.getElementById('editEventDate').value        = event.event_date;
+      document.getElementById('editEventTime').value        = event.event_time;
+      document.getElementById('editEventLocation').value    = event.location;
+      document.getElementById('editEventDescription').value = event.description;
+
+      $('#editEventModal').modal('show');
+    };
+  });
+}
+
+
   document.querySelectorAll('.delete-event-btn').forEach(btn => {
     btn.onclick = async () => {
-      if (!confirm('Delete event?')) return;
+      if (!confirm('Deleting an Event is permanent. Are you sure?')) return;
       const fd = new FormData();
       fd.set('event_id', btn.dataset.id);
       try {
@@ -68,10 +248,9 @@ function hookEventButtons() {
       $('#attendModal').modal('show');
     };
   });
-  
-}
 
-// Helper for button
+
+// Attend button
 const attendForm = document.getElementById('attendForm');
 if (attendForm) {
   attendForm.onsubmit = async (e) => {
@@ -94,7 +273,7 @@ if (attendForm) {
 
       if (res.ok) {
         document.getElementById('attendMsg').textContent =
-          "Registration successful! (SMTP would go here)";
+          "Registration successful!";
         document.getElementById('attendMsg').style.display = 'block';
         attendForm.reset();
       } else {
@@ -108,13 +287,8 @@ if (attendForm) {
 
 
 // Protection for creating events restricted admin/organizer
-if (
-  window.location.pathname.includes('admin.html') &&
-  window.currentUser &&
-  ['admin', 'organizer'].includes(window.currentUser.type)
-) {
+if (window.location.pathname.includes('admin.html')) {
   const createEventForm = document.getElementById('createEventForm');
-
   if (createEventForm) {
     createEventForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -129,6 +303,7 @@ if (
     };
   }
 }
+
 
 
 // Feedback
@@ -150,12 +325,26 @@ if (window.location.pathname.includes('feedback.html')) {
   }
 }
 
-// On page load, decide what to fetch
-window.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('eventsTable')) {
-    fetchEvents();
-  }
-});
+  window.addEventListener('DOMContentLoaded', async () => {
+    await loadSession();
+  
+    const isAdminPage = !!document.getElementById('editEventModal');
+  
+    if (isAdminPage) {
+      if (currentUser.user_type !== 'admin') {
+        alert("Access Denied: Admins Only.");
+        window.location.href = "index.html";
+        return;    
+      }
+      // admin sees full list
+      fetchEvents();
+    } else {
+      // everyone else sees public list
+      fetchEvents();
+    }
+  });
+  
+
 
 
 document.querySelectorAll('.attend-btn').forEach(btn => {
@@ -251,4 +440,19 @@ if (window.location.pathname.includes('event_registration.html')) {
       };
     }
   }
+
+const editEventForm = document.getElementById('editEventForm');
+    if (editEventForm) {
+      editEventForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const fd = new FormData(editEventForm);
+        try {
+          await postForm('update_event.php', fd);  // (we'll create update_event.php next)
+          $('#editEventModal').modal('hide');
+          fetchEvents();
+        } catch (err) {
+          alert(err.message || "Failed to update event.");
+        }
+      };
+    }
 }

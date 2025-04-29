@@ -1,0 +1,13 @@
+# Handle line endings automatically
+* text=auto
+
+# Force consistent line endings
+*.php text eol=lf
+*.js  text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.env text eol=lf

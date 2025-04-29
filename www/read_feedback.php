@@ -1,6 +1,6 @@
 <?php
 // Admin view of all feedback entries
-
+session_start();
 require_once __DIR__ . '/db.php';
 
 // Fetch feedback joined with registration info (including guest_name)
