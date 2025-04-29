@@ -49,12 +49,13 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="mailto:zjkzwb@umkc.edu">Contact</a></li>
+                <li class="nav-item active"><a class="nav-link" href="announcements.html">Announcements</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown">More</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Bootstrap Docs</a>
-                        <a class="dropdown-item" href="#">CSS Docs</a>
+                        <a class="dropdown-item" href="#">Admin Dashboard</a>
+                        <a class="dropdown-item" href="#">User Dashboard</a>
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
@@ -96,6 +97,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <th>Event</th>
               <th>Date</th>
               <th>Time</th>
+              <th>Countdown</th>
               <th>Description</th>
               <th>Status</th>
               <th>Action</th>
@@ -103,13 +105,23 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
           </thead>
           <tbody>
             <?php foreach ($events as $event):
-              $dt = new DateTime($event['event_date']); ?>
+                // 1) Parse the event_date into a DateTime
+                $dt  = new DateTime($event['event_date']);
+
+                // 2) Generate an ISO-8601 string WITHOUT a timezone offset,
+                //    which JS can reliably parse (YYYY-MM-DDTHH:MM:SS)
+                $iso = $dt->format('Y-m-d\\TH:i:s');
+            ?>
               <tr>
-                <td><?= htmlspecialchars($event['title']) ?></td>
-                <td><?= $dt->format('Y-m-d') ?></td>
-                <td><?= $dt->format('H:i') ?></td>
-                <td><?= htmlspecialchars($event['description']) ?></td>
-                <td><?= htmlspecialchars($event['status']) ?></td>
+                <td><?= htmlspecialchars($event['title']       ?? '') ?></td>
+                <td><?= htmlspecialchars($dt->format('Y-m-d'))    ?></td>
+                <td><?= htmlspecialchars($dt->format('H:i'))      ?></td>
+                <td>
+                  <!-- 3) Emit the ISO timestamp into data-target -->
+                  <span class="countdown" data-target="<?= htmlspecialchars($iso) ?>"></span>
+                </td>
+                <td><?= htmlspecialchars($event['description'] ?? '') ?></td>
+                <td><?= htmlspecialchars($event['status']      ?? '') ?></td>
                 <td>
                   <form method="POST" action="register.php" style="display:inline">
                     <input type="hidden" name="event_id" value="<?= (int)$event['event_id'] ?>">
@@ -139,6 +151,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="countdown.js"></script>
 
 
 </body>
