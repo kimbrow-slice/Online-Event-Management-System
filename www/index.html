@@ -1,6 +1,7 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,6 +11,7 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="stylesheet.css">
 </head>
+
 <body>
 
 <!-- Navigation Bar -->
@@ -21,32 +23,36 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
-                <li class="nav-item active"><a class="nav-link" href="announcements.html">Announcements</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="./events.html">Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown">More</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button"
+                        data-toggle="dropdown">More</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Admin Dashboard</a>
-                        <a class="dropdown-item" href="#">User Dashboard</a>
+                        <a class="dropdown-item" href="#">Bootstrap Docs</a>
+                        <a class="dropdown-item" href="#">CSS Docs</a>
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+                <li class="nav-item" id="loginNav">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item" id="logoutNav" style="display: none;">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<div class="jumbotron jumbotron-fluid text-center mb-0">
-    <div class="container">
-        <h1 class="animated-heading">Event Manager</h1>
-        <!--Place image here-->
+    <!-- Hero Section -->
+    <div class="jumbotron jumbotron-fluid text-center mb-0">
+        <div class="container">
+            <h1 class="animated-heading">Event Manager</h1>
+            <!--Place image here-->
 
         <p class="lead">Your gateway to the latest and greatest events</p>
-        <!-- UPDATED SEARCH FORM -->
-        <form method="GET" action="events.php" class="form-inline justify-content-center mt-4">
+         <!-- UPDATED SEARCH FORM -->
+         <form method="GET" action="events.php" class="form-inline justify-content-center mt-4">
             <input
                     name="q"
                     class="form-control mr-2"
@@ -66,11 +72,11 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <!--Add events picture here-->
-                <img src="Events.png" class="img-fluid" alt="Upcoming Events">
+                <img src="placeholder_events.jpg" class="card-img-top" alt="Upcoming Events">
                 <div class="card-body">
                     <h5 class="card-title">Upcoming Events</h5>
                     <p class="card-text">Browse the list of upcoming events below.</p>
-                    <a href="events.php" class="btn btn-primary">View Events</a>
+                    <a href="#events" class="btn btn-primary">View Events</a>
                 </div>
             </div>
         </div>
@@ -78,27 +84,29 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <!--Add events announcements picture here-->
-                <img src="Announcments.png" class="img-fluid" alt="Announcements">
+                <img src="placeholder_announcements.jpg" class="card-img-top" alt="Announcements">
                 <div class="card-body">
                     <h5 class="card-title">Announcements</h5>
                     <p class="card-text">Latest news and updates from our organizers.</p>
-                    <a href="announcements.html" class="btn btn-primary">Read Announcements</a>
+                    <a href="#announcements" class="btn btn-primary">Read Announcements</a>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+</div>
 
 <!-- Footer -->
-<footer class="footer fixed-bottom bg-dark text-light">
+<footer class="footer">
     <div class="container text-center">
         <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
     </div>
 </footer>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

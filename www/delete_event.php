@@ -1,4 +1,6 @@
 <?php
+session_start();
+if ($_SESSION['user_type']!=='admin') { http_response_code(403); exit; }
 
 require_once 'db.php';
 
