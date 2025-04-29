@@ -16,14 +16,14 @@ function sendMail(string $to, string $subject, string $body): bool {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host       = 'smtp.example.com';     // Update: SMTP host
+        $mail->Host       = 'smtp.sendgrid.net'; 
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'smtp-user@example.com';// Update: SMTP user
-        $mail->Password   = 'smtp-password';        // Update: SMTP pass
+        $mail->Username   = 'get_UserID+Email';
+        $mail->Password   = 'apikey';  
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
-        $mail->setFrom('no-reply@example.com', 'Event Portal');
+        $mail->setFrom('senderemail@outlook.com', 'Event Portal');
         $mail->addAddress($to);
         $mail->Subject = $subject;
         $mail->Body    = $body;
