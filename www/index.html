@@ -14,35 +14,35 @@
 
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">EventManager</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="./events.html">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button"
-                            data-toggle="dropdown">More</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Bootstrap Docs</a>
-                            <a class="dropdown-item" href="#">CSS Docs</a>
-                        </div>
-                    </li>
-                    <li class="nav-item" id="loginNav">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                    <li class="nav-item" id="logoutNav" style="display: none;">
-                        <a class="nav-link" href="logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">EventManager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="./events.html">Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button"
+                        data-toggle="dropdown">More</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Bootstrap Docs</a>
+                        <a class="dropdown-item" href="#">CSS Docs</a>
+                    </div>
+                </li>
+                <li class="nav-item" id="loginNav">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item" id="logoutNav" style="display: none;">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Hero Section -->
     <div class="jumbotron jumbotron-fluid text-center mb-0">
@@ -50,53 +50,59 @@
             <h1 class="animated-heading">Event Manager</h1>
             <!--Place image here-->
 
-            <p class="lead">Your gateway to the latest and greatest events</p>
-            <form class="form-inline justify-content-center mt-4">
-                <!--Add search Logic here-->
-                <input class="form-control mr-2" type="search" placeholder="Search events..." aria-label="Search">
-                <button class="btn btn-light" type="submit">Search</button>
-            </form>
-        </div>
+        <p class="lead">Your gateway to the latest and greatest events</p>
+         <!-- UPDATED SEARCH FORM -->
+         <form method="GET" action="events.php" class="form-inline justify-content-center mt-4">
+            <input
+                    name="q"
+                    class="form-control mr-2"
+                    type="search"
+                    placeholder="Search events..."
+                    aria-label="Search"
+            >
+            <button class="btn btn-light" type="submit">Search</button>
+        </form>
     </div>
+</div>
 
-    <!-- Main Content -->
-    <div class="container py-5">
-        <div class="row">
-            <!-- Upcoming Events Card -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <!--Add events picture here-->
-                    <img src="placeholder_events.jpg" class="card-img-top" alt="Upcoming Events">
-                    <div class="card-body">
-                        <h5 class="card-title">Upcoming Events</h5>
-                        <p class="card-text">Browse the list of upcoming events below.</p>
-                        <a href="#events" class="btn btn-primary">View Events</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Announcements Card -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <!--Add events announcements picture here-->
-                    <img src="placeholder_announcements.jpg" class="card-img-top" alt="Announcements">
-                    <div class="card-body">
-                        <h5 class="card-title">Announcements</h5>
-                        <p class="card-text">Latest news and updates from our organizers.</p>
-                        <a href="#announcements" class="btn btn-primary">Read Announcements</a>
-                    </div>
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row">
+        <!-- Upcoming Events Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <!--Add events picture here-->
+                <img src="Events.png" class="card-img-top" alt="Upcoming Events">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Events</h5>
+                    <p class="card-text">Browse the list of upcoming events below.</p>
+                    <a href="#events" class="btn btn-primary">View Events</a>
                 </div>
             </div>
         </div>
-
-    </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container text-center">
-            <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
+        <!-- Announcements Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <!--Add events announcements picture here-->
+                <img src="Announcments.png" class="card-img-top" alt="Announcements">
+                <div class="card-body">
+                    <h5 class="card-title">Announcements</h5>
+                    <p class="card-text">Latest news and updates from our organizers.</p>
+                    <a href="#announcements" class="btn btn-primary">Read Announcements</a>
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
+
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container text-center">
+        <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
+    </div>
+</footer>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
