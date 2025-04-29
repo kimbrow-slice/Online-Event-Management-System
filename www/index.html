@@ -31,6 +31,7 @@
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
             </ul>
         </div>
     </div>
@@ -43,9 +44,15 @@
         <!--Place image here-->
 
         <p class="lead">Your gateway to the latest and greatest events</p>
-        <form class="form-inline justify-content-center mt-4">
-            <!--Add search Logic here-->
-            <input class="form-control mr-2" type="search" placeholder="Search events..." aria-label="Search">
+        <!-- UPDATED SEARCH FORM -->
+        <form method="GET" action="events.php" class="form-inline justify-content-center mt-4">
+            <input
+                    name="q"
+                    class="form-control mr-2"
+                    type="search"
+                    placeholder="Search events..."
+                    aria-label="Search"
+            >
             <button class="btn btn-light" type="submit">Search</button>
         </form>
     </div>
@@ -83,7 +90,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="footer">
+<footer class="footer fixed-bottom bg-dark text-light">
     <div class="container text-center">
         <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
     </div>

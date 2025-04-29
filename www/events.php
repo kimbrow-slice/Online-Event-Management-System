@@ -2,16 +2,30 @@
 // events.php
 require_once 'db.php';  // gives you $pdo :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1}
 
-// Fetch live events (no more `location`)
-$stmt = $pdo->query("
-    SELECT event_id, title, description, event_date, status
-    FROM events
-    WHERE status IN ('upcoming','open')
-    ORDER BY event_date
-");
+// NEW: server-side search support
+$search = trim($_GET['q'] ?? '');
+
+if ($search !== '') {
+    $sql = "
+      SELECT event_id, title, description, event_date, status
+      FROM events
+      WHERE status IN ('upcoming','open')
+        AND ( title       LIKE :search
+           OR description LIKE :search )
+      ORDER BY event_date
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([ 'search' => "%{$search}%" ]);
+} else {
+    $stmt = $pdo->query("
+      SELECT event_id, title, description, event_date, status
+      FROM events
+      WHERE status IN ('upcoming','open')
+      ORDER BY event_date
+    ");
+}
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,6 +58,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
             </ul>
         </div>
     </div>
@@ -54,11 +69,17 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <h1 class="animated-heading">Events</h1>
         <p class="lead">Your gateway to the latest and greatest events</p>
-        <form class="form-inline justify-content-center mt-4">
-            <!--Add search Logic here-->
-            <input class="form-control mr-2" type="search" placeholder="Search events..." aria-label="Search">
-            <button class="btn btn-light" type="submit">Search</button>
-        </form>
+<form method="GET" action="events.php" class="form-inline justify-content-center mt-4">
+  <input
+    name="q"
+    value="<?= htmlspecialchars($search) ?>"
+    class="form-control mr-2"
+    type="search"
+    placeholder="Search events…"
+    aria-label="Search"
+  >
+  <button class="btn btn-light" type="submit">Search</button>
+</form>
     </div>
 </div>
 
@@ -109,10 +130,10 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
 <!-- Footer -->
-<footer class="footer">
-    <div class="container text-center">
-        <p class="mb-0">&copy; 2025 Event Manager. Our names or all rights reserved or something else?</p>
-    </div>
+<footer class="footer fixed-bottom bg-dark text-light">
+  <div class="container text-center">
+    <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
+  </div>
 </footer>
 
 <!-- Scripts -->
