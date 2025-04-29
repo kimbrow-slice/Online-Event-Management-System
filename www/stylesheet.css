@@ -48,8 +48,9 @@ body {
 }
 
 .card-img-top {
-    height: 200px;
-    object-fit: cover;
+    height: auto;        /* let the image dictate its own height */
+    object-fit: contain;    /* don’t crop */
+    max-width: 100%;     /* keep it responsive */
 }
 
 .table thead th {

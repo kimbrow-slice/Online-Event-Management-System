@@ -1,9 +1,23 @@
+<?php
+// events.php
+require_once 'db.php';  // gives you $pdo :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1}
+
+// Fetch live events (no more `location`)
+$stmt = $pdo->query("
+    SELECT event_id, title, description, event_date, status
+    FROM events
+    WHERE status IN ('upcoming','open')
+    ORDER BY event_date
+");
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Event Manager</title>
+    <title>Events</title>
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom Styles -->
@@ -20,8 +34,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+                <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="mailto:zjkzwb@umkc.edu">Contact</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown">More</a>
@@ -30,7 +43,7 @@
                         <a class="dropdown-item" href="#">CSS Docs</a>
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
             </ul>
         </div>
     </div>
@@ -48,38 +61,52 @@
         </form>
     </div>
 </div>
-<!-- Events Table -->
-<div class="row" id="events">
+
+
+
+ <!-- Events Table -->
+  <div class="row" id="events">
     <div class="col-12">
-        <h2 class="mb-4">All Events</h2>
-        <div class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead class="thead-light">
-                <tr>
-                    <th>Event</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Location</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><!--?php echo $event['name']; ?--></td>
-                    <td><!--?php echo $event['date']; ?--></td>
-                    <td><!--?php echo $event['time']; ?--></td>
-                    <td><!--?php echo $event['location']; ?--></td>
-                    <td><!--?php echo $event['description']; ?--></td>
-                    <td><button class="btn btn-success btn-sm">Register</button></td>
-                </tr>
-                <!-- More rows as needed -->
-                </tbody>
-            </table>
-        </div>
+      <h2 class="mb-4">All Events</h2>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>Event</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($events as $event):
+              $dt = new DateTime($event['event_date']); ?>
+              <tr>
+                <td><?= htmlspecialchars($event['title']) ?></td>
+                <td><?= $dt->format('Y-m-d') ?></td>
+                <td><?= $dt->format('H:i') ?></td>
+                <td><?= htmlspecialchars($event['description']) ?></td>
+                <td><?= htmlspecialchars($event['status']) ?></td>
+                <td>
+                  <form method="POST" action="register.php" style="display:inline">
+                    <input type="hidden" name="event_id" value="<?= (int)$event['event_id'] ?>">
+                    <button class="btn btn-success btn-sm">Register</button>
+                  </form>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+            <?php if (empty($events)): ?>
+              <tr>
+                <td colspan="6" class="text-center">No upcoming events.</td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
-</div>
+  </div>
 
 <!-- Footer -->
 <footer class="footer">
