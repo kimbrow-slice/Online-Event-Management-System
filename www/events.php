@@ -54,7 +54,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown">More</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Admin Dashboard</a>
+                        <a class="dropdown-item" href="admin.html">Admin Dashboard</a>
                         <a class="dropdown-item" href="#">User Dashboard</a>
                     </div>
                 </li>

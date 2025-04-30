@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS events (
   event_id     INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title        VARCHAR(255) NOT NULL,
   description  TEXT,
-  event_date   DATETIME NOT NULL,
+  event_date   DATE NOT NULL,                                    -- ← changed from DATETIME to just DATE
+  event_time   TIME            NOT NULL DEFAULT '00:00:00',      -- ← added missing column
+  location     VARCHAR(255)    NOT NULL,                         -- ← added missing column
   status       ENUM('upcoming','open','closed','cancelled') NOT NULL DEFAULT 'upcoming',
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
