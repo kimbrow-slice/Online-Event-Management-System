@@ -50,6 +50,7 @@
         <table class="table table-striped" id="eventsTable">
             <thead>
               <tr>
+                <th>Title</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Countdown</th>
@@ -129,13 +130,13 @@
                 .querySelectorAll('#eventsTable tbody tr')
                 .forEach(row => {
                   // 1) Read your static Date & Time cells
-                  const dateText = row.cells[0].textContent.trim(); // YYYY-MM-DD
-                  const timeText = row.cells[1].textContent.trim(); // HH:MM:SS
+                  const dateText = row.cells[1].textContent.trim(); // YYYY-MM-DD
+                  const timeText = row.cells[2].textContent.trim(); // HH:MM:SS
 
                   // 2) If there’s not yet a countdown <td>, insert one at index 2
                   let cdCell = row.querySelector('.countdown');
                   if (!cdCell) {
-                    cdCell = row.insertCell(2);
+                    cdCell = row.insertCell(3);
                     cdCell.className = 'countdown';
                   }
 

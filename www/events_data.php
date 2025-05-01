@@ -24,6 +24,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
     echo "
       <tr>
+        <td>{$title}</td>
         <td>{$date}</td>
         <td>{$time}</td>
         <td>{$loc}</td>
