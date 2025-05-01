@@ -2,6 +2,8 @@
 // Handles search form on index.html (redirect) and events.html (AJAX reload)
 
 document.addEventListener('DOMContentLoaded', () => {
+
+
     const searchForm  = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
     if (!searchForm || !searchInput) return;
@@ -13,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If on index.html, redirect to events.html with query
         if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+
             window.location.href = `events.html?q=${encodeURIComponent(q)}`;
+
             return;
         }
 
@@ -27,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const params   = new URLSearchParams(window.location.search);
         const initialQ = params.get('q') || '';
         if (initialQ) searchInput.value = initialQ;
+
         fetchAndRender(initialQ
             ? `events_data.php?q=${encodeURIComponent(initialQ)}`
             : 'events_data.php'
