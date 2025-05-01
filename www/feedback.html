@@ -3,121 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Event Manager</title>
+  <title>Event Feedback</title>
   <!-- Bootstrap 4 -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-      <a class="navbar-brand" href="#">Events</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active"><a class="nav-link" href="./index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
-          <li class="nav-item" id="loginNav">
-            <a class="nav-link" href="login.html">Login</a>
-        </li>
-        <li class="nav-item" id="logoutNav" style="display: none;">
-            <a class="nav-link" href="logout.php">Logout</a>
-        </li>        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <div class="jumbotron jumbotron-fluid text-center mb-0">
-    <div class="container">
-      <h1 class="animated-heading">Events</h1>
-      <p class="lead">Your gateway to the latest and greatest events</p>
-      <form class="form-inline justify-content-center mt-4">
-        <input class="form-control mr-2" type="search" placeholder="Search events…" aria-label="Search">
-        <button class="btn btn-light" type="submit">Search</button>
-      </form>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Events</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="./index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
+        <li class="nav-item" id="loginNav"><a class="nav-link" href="login.html">Login</a></li>
+        <li class="nav-item" id="logoutNav" style="display:none;"><a class="nav-link" href="logout.php">Logout</a></li>
+      </ul>
     </div>
   </div>
+</nav>
 
+<div class="jumbotron jumbotron-fluid text-center mb-0">
+  <div class="container">
+    <h1 class="animated-heading">Feedback</h1>
+    <p class="lead">Select an event below to leave your feedback</p>
+  </div>
+</div>
+
+<div class="container py-5">
   <!-- Events Table -->
-  <div class="container py-5" id="events">
-    <h2 class="mb-4">All Events</h2>
-    <div class="table-responsive">
-        <table class="table table-striped" id="eventsTable">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Location</th>
-                <th>Description</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Gets populated by our main.js -->
-            </tbody>
-          </table>          
-    </div>
+  <h2 class="mb-4">All Events</h2>
+  <div class="table-responsive">
+    <table class="table table-striped" id="eventsTable">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Populated dynamically by main.js -->
+      </tbody>
+    </table>
   </div>
 
-  <!-- Attend Modal -->
-<div class="modal fade" id="attendModal" tabindex="-1" role="dialog" aria-labelledby="attendModalLabel" aria-hidden="true">
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form id="attendForm" class="modal-content">
+      <form id="feedbackForm" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="attendModalLabel">Register for Event</h5>
+          <h5 class="modal-title" id="feedbackModalLabel">Leave Feedback</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <p><strong>Event:</strong> <span id="attendEventTitle"></span></p>
-          <p><strong>Date:</strong> <span id="attendEventDate"></span></p>
-          <input type="hidden" name="event_id" id="attendEventId" />
-  
+          <input type="hidden" name="registration_id" id="feedbackEventId" />
           <div class="form-group">
-            <label for="guestName">Your Name</label>
-            <input type="text" class="form-control" name="guest_name" id="guestName" required />
+            <label for="feedbackRating">Rating</label>
+            <select name="rating" id="feedbackRating" class="form-control" required>
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Good</option>
+              <option value="3">3 - Fair</option>
+              <option value="2">2 - Poor</option>
+              <option value="1">1 - Terrible</option>
+            </select>
           </div>
-  
           <div class="form-group">
-            <label for="guestEmail">Your Email</label>
-            <input type="email" class="form-control" name="guest_email" id="guestEmail" required />
+            <label for="feedbackComments">Comments</label>
+            <textarea name="comments" id="feedbackComments" class="form-control" rows="4" required></textarea>
           </div>
-  
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="emailConsent" required />
-            <label class="form-check-label" for="emailConsent">
-              I agree to receive a confirmation email
-            </label>
-          </div>
-  
-          <div id="attendMsg" class="text-success font-weight-bold mt-2" style="display: none;"></div>
         </div>
-  
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Confirm Registration</button>
+          <button type="submit" class="btn btn-primary">Submit Feedback</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
   </div>
-  
 
-  <!-- Footer -->
-  <footer class="footer bg-light">
-    <div class="container text-center py-3">
-      <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
-    </div>
-  </footer>
+  <!-- Feedback List -->
+  <h2 class="mt-5 mb-3">View All Feedback</h2>
+  <div id="feedbackList" class="mb-5"><!-- Populated via read_feedback.php --></div>
+</div>
 
-  <!-- Scripts -->
-  <script src="main.js" defer></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Footer -->
+<footer class="footer bg-light">
+  <div class="container text-center py-3">
+    <p class="mb-0">Copyright &copy; 2025 Event Manager.</p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="main.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => {
+    // After main.js populates the table, override the Action buttons
+    const tableBody = document.querySelector('#eventsTable tbody');
+    const observer = new MutationObserver(() => {
+      tableBody.querySelectorAll('.attend-btn').forEach(btn => {
+        // Turn the existing Attend button into a Feedback button
+        btn.textContent = 'Feedback';
+        btn.className = 'btn btn-secondary btn-sm feedback-btn';
+        btn.onclick = () => {
+          const eventId = btn.dataset.id;                                 // the ID you want
+          document.getElementById('feedbackEventId').value = eventId;     // ← actually use it
+          $('#feedbackModal').modal('show');
+        };
+      });
+    });
+    observer.observe(tableBody, { childList: true });
+
+    // Load existing feedback
+    fetch('read_feedback.php', { credentials: 'include' })
+            .then(r => r.text())
+            .then(html => {
+              document.getElementById('feedbackList').innerHTML = html;
+            })
+            .catch(console.error);
+
+    // Handle feedback submission
+    document.getElementById('feedbackForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('submit_feedback.php', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+              .then(r => r.text())
+              .then(msg => {
+                $('#feedbackModal').modal('hide');
+                // Reload feedback list
+                return fetch('read_feedback.php', { credentials: 'include' });
+              })
+              .then(r => r.text())
+              .then(html => {
+                document.getElementById('feedbackList').innerHTML = html;
+              })
+              .catch(console.error);
+    });
+  });
+</script>
 </body>
 </html>

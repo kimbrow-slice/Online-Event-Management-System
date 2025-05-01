@@ -5,16 +5,16 @@ require_once __DIR__ . '/db.php';
 
 // Fetch feedback joined with registration info (including guest_name)
 $stmt = $pdo->query("
-    SELECT 
-        f.feedback_id, 
-        f.rating, 
+    SELECT
+        f.feedback_id,
+        f.rating,
         f.comments,
-        r.registration_id, 
-        r.user_id, 
+        r.registration_id,
+        r.user_id,
         r.guest_name,
         r.guest_email
     FROM feedback f
-    JOIN registrations r 
+    JOIN registrations r
       ON f.registration_id = r.registration_id
     ORDER BY f.submitted_at DESC
 ");
